@@ -85,6 +85,19 @@ function showCopiedToast() {
   }, 2000);
 }
 
+function closeMenu() {
+  // Try removing the menu element directly
+  const menu = document.querySelector('[role="menu"]');
+  if (menu) {
+    const menuContainer = menu.closest('[data-testid]') || menu.parentElement;
+    if (menuContainer) menuContainer.remove();
+    else menu.remove();
+  }
+  // Also fire Escape and body click as fallback
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', keyCode: 27, bubbles: true, cancelable: true }));
+  document.body.click();
+}
+
 // ─── Menu Item Injection ───────────────────────────────────────────────────────
 
 function createFixupMenuItem(referenceItem) {
@@ -145,7 +158,7 @@ function createFixupMenuItem(referenceItem) {
       showCopiedToast();
     }
 
-    document.body.click();
+    closeMenu();
   });
 
   item.addEventListener('keydown', (e) => {
