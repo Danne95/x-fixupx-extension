@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>xfixupx</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --border: #1e1e2e;
+      --accent: #1d9bf0;
+      --accent-dim: rgba(29,155,240,0.15);
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --green: #00d26a;
+      --green-dim: rgba(0,210,106,0.12);
+      --red: #ff4d6d;
+      --red-dim: rgba(255,77,109,0.12);
+    }
+
+    body {
+      width: 280px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+      border-radius: 0;
+      user-select: none;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(29,155,240,0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .title-group h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.2px;
+      line-height: 1.2;
+    }
+
+    .title-group .version {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 18px;
+    }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .toggle-row:hover {
+      border-color: var(--accent);
+    }
+
+    .toggle-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .toggle-label span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .status-text {
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .status-text.on  { color: var(--green); }
+    .status-text.off { color: var(--red); }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform 0.25s, background 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+
+    input:checked + .slider {
+      background: var(--green-dim);
+      border: 1px solid rgba(0,210,106,0.35);
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(20px);
+      background: var(--green);
+    }
+
+    /* Info box */
+    .info-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .info-box code {
+      font-family: 'Space Mono', monospace;
+      font-size: 10.5px;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      line-height: 1.8;
+    }
+
+    .footer strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">Fx</div>
+    <div class="title-group">
+      <h1>FixupX Link Copier</h1>
+      <div class="version">v1.0.0</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="toggle-row">
+    <div class="toggle-label">
+      <span>Extension</span>
+      <span class="status-text" id="statusText">ON</span>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="info-box">
+    Adds a <strong>"Copy link (fixup)"</strong> option to the share menu on X.com.<br><br>
+    Replaces <code>x.com</code> → <code>fixupx.com</code> so link previews work properly when sharing on discord.
+  </div>
+
+  <div class="footer">
+    made by <strong>fromepicbrain</strong>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
